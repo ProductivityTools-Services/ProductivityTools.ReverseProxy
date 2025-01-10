@@ -7,3 +7,5 @@ Why to use a reverse proxy?
 
 Tutorial:
 docker run -d --name nginx-base -p:84:80 nginx:latest
+edit config
+docker cp ./default.conf nginx-base:/etc/nginx/conf.d/
