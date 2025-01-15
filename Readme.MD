@@ -18,6 +18,7 @@ Remarks:
 ```
 sudo ufw status verbose sudo ufw allow 81/tcp
 ```
+![](2025-01-14-23-12-41.png)
 
 In dns provider remember to create subdomain or to point all subdomains  to your server *.productivitytools.top
 
