@@ -6,12 +6,13 @@ Why to use a reverse proxy?
 
 
 Tutorial:
+```
 docker run -d --name nginx-base -p:81:80 nginx:latest
 edit config
 docker cp ./default.conf nginx-base:/etc/nginx/conf.d/
 docker exec nginx-base nginx -t
 docker exec nginx-base nginx -s reload
-
+```
 
 Remarks:
 - remember to open port on the ubuntu, that your docker image operates.
