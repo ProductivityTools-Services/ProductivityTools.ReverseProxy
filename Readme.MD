@@ -62,3 +62,12 @@ Change Nginx so you know from where it was hosted
 ```
 sudo nano /var/www/html/index.nginx-debian.html
 ```
+
+### certbot 
+
+```
+sudo apt-get update
+sudo apt-get install certbot
+sudo apt-get install python3-certbot-nginx
+sudo certbot certonly --nginx -d testrp.productivitytools.top
+```
