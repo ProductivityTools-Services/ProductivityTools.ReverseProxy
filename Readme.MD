@@ -42,6 +42,16 @@ sudo apt install nginx -y
 curl localhost
 ```
 
+nginx
+```
+apt-get update
+sudo apt-get install certbot -y
+apt-get install python3-certbot-nginx -y
+
+```
+
+
+
 ### Install docker
 
 ```
