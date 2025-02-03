@@ -41,6 +41,48 @@ sudo apt-get update
 sudo apt install nginx -y
 curl localhost
 ```
+![](Images/20250203213747.png)
+
+----
+### Create webage
+[tutorial](https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-20-04#step-5-%E2%80%93-setting-up-server-blocks-(recommended))
+- ngnix serves documents out of the directory /var/www/html for the single site
+- for multiple sites we should create a structure in /var/www
+```
+cd /var/www/
+sudo mkdir -p /var/www/testrp.productivitytools.top/html
+sudo chown -R $USER:$USER /var/www/testrp.productivitytools.top/html/
+sudo chmod -R 755 /var/www/testrp.productivitytools.top/html/
+cp html/index.nginx-debian.html testrp.productivitytools.top/html/index.html
+sudo nano /etc/nginx/sites-available/testrp.productivitytools.top
+```
+
+```
+server {
+        listen 80;
+        listen [::]:80;
+
+        root /var/www/testrp.productivitytools.top/html;
+        index index.html index.htm;                              
+
+        server_name testrp.productivitytools.top www.testrp.productivitytools.top;
+
+        location / {
+                try_files $uri $uri/ =404;
+        }
+}
+
+```
+
+sudo ln -s /etc/nginx/sites-available/testrp.productivitytools.top /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo nginx -s reload
+
+
+sudo apt install certbot python3-certbot-nginx
+
+-----
+
 
 nginx
 ```
@@ -49,6 +91,10 @@ sudo apt-get install certbot -y
 apt-get install python3-certbot-nginx -y
 
 ```
+
+nginx config files
+- /etc/ngninx/conf.d - Redhat
+- sites-enabled sites-available - Debian, Ubuntu
 
 
 
