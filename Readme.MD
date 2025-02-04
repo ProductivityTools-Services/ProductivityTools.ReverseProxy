@@ -78,13 +78,29 @@ sudo ln -s /etc/nginx/sites-available/testrp.productivitytools.top /etc/nginx/si
 sudo nginx -t
 sudo nginx -s reload
 
+The page should open under address. (it is not secure as it is http)
 
+![](Images/20250204211550.png)
+
+### Adding SSL to the page
+
+```
 sudo apt install certbot python3-certbot-nginx
-
+```
+check the firewall
+```
+sudo ufw status
+```
+Certbot
+```
+sudo certbot --nginx -d testrp.productivitytools.top
+```
+![](Images/20250204212214.png)
 -----
+sudo systemctl status certbot.timer
 
 
-nginx
+### nginx
 ```
 apt-get update
 sudo apt-get install certbot -y
