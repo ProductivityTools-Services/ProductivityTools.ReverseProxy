@@ -1,27 +1,24 @@
 
 Why to use a reverse proxy?
-- if you have multiple services on the one computer you cannot create the subhost for them, they need to be hosted on some port (localhost:80, localhost:81 etc). This means that in the internet you also have your service under specific port like productivitytools.top:81. You can add the subhost, but still port is needed
+- if you have multiple services on the one computer you cannot create the subhost for them, they need to be hosted on different ports (localhost:80, localhost:81 etc). This means that in the internet you also have your service under specific port like productivitytools.top:81. You can add the subhost, but still port is needed
 - above also means that you cannot have two pages on the standard 80 port. 
-- if you have multiple services (localhost:80, localhost:81 etc) for each of them you need to have different ssl certificate 
 
 
-Tutorial:
-```
-docker run -d --name nginx-base -p:81:80 nginx:latest
-edit config
-docker cp ./default.conf nginx-base:/etc/nginx/conf.d/
-docker exec nginx-base nginx -t
-docker exec nginx-base nginx -s reload
-```
+
+This readme presents how to create reverse proxy that will reroute domain request to the docker one. Tutorial will also show how to setup SSL on the reverse proxy. 
+
+![](Images/20250205215323.png)
+
 
 Remarks:
 - remember to open port on the ubuntu, that your docker image operates.
 ```
 sudo ufw status verbose sudo ufw allow 81/tcp
 ```
-![](2025-01-14-23-12-41.png)
-
-In dns provider remember to create subdomain or to point all subdomains  to your server *.productivitytools.top
+- nginx config files
+  - /etc/ngninx/conf.d - Redhat
+  - sites-enabled sites-available - Debian, Ubuntu
+- default page hosted by ngnix is placed sudo nano /var/www/html/index.nginx-debian.html
 
 ## Reverse Proxy and https termination
 
@@ -73,11 +70,12 @@ server {
 }
 
 ```
-
+Enable page
+```
 sudo ln -s /etc/nginx/sites-available/testrp.productivitytools.top /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo nginx -s reload
-
+```
 The page should open under address. (it is not secure as it is http)
 
 ![](Images/20250204211550.png)
@@ -93,6 +91,7 @@ sudo ufw status
 ```
 Certbot
 ```
+sudo apt-get install certbot -y 
 sudo certbot --nginx -d testrp.productivitytools.top
 ```
 ![](Images/20250204212214.png)
@@ -100,21 +99,11 @@ sudo certbot --nginx -d testrp.productivitytools.top
 sudo systemctl status certbot.timer
 
 
-### nginx
-```
-apt-get update
-sudo apt-get install certbot -y
-apt-get install python3-certbot-nginx -y
+## Docker behind reverse proxy
+The next steps will install docker and host the page on it.
+The page will be shared on http and we will access it through https terminated on reverse proxy
 
-```
-
-nginx config files
-- /etc/ngninx/conf.d - Redhat
-- sites-enabled sites-available - Debian, Ubuntu
-
-
-
-### Install docker
+Install docker
 
 ```
 sudo apt-get update
@@ -130,17 +119,36 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 sudo docker run hello-world
 sudo docker run --rm -d -p 81:80 --name my-nginx nginx
 ```
-Change Nginx so you know from where it was hosted
+![](Images/20250205213721.png)
+
+
+### Reverse proxy configuration (route to docker)
 
 ```
-sudo nano /var/www/html/index.nginx-debian.html
+cd /etc/nginx/sites-availaible 
+sudo nano testrpdocker.produtivitytools.top 
 ```
 
-### certbot 
+```
+ server {
+        listen 80;
+        listen [::]:80;
+
+        server_name testrpdocker.productivitytools.top;
+
+        location / {
+                proxy_pass htt://10.128.0.9:81;
+        }
+}
 
 ```
-sudo apt-get update
-sudo apt-get install certbot
-sudo apt-get install python3-certbot-nginx
-sudo certbot certonly --nginx -d testrp.productivitytools.top
 ```
+sudo nginx -t
+sudo nginx -s reload
+```
+![](Images/20250205214613.png)
+
+```
+sudo certbot --nginx -d testrpdocker.productivitytools.top
+```
+![](Images/20250205214803.png)
