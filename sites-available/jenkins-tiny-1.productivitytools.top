@@ -1,0 +1,10 @@
+ server {
+        listen 80;
+        listen [::]:80;
+
+        server_name jenkins-tiny-1.productivitytools.top;
+
+        location / {
+                proxy_pass http://192.168.0.11:8081;
+        }
+}
