@@ -6,8 +6,19 @@ To setup reverse proxy. Execute script
 chmod +x CopySites-Availiable.sh
 .CopySites-Availiable.sh
 ```
+
+ADDED to the script
+
 Add ssl if required (maybe it should be added to the script)
 ```
 sudo certbot --nginx -d feedback-api.productivitytools.top
+sudo nginx -t
+sudo nginx -s reload
 ```
 
+
+Debug:
+```
+ls /etc/nginx/sites-enabled/
+
+```

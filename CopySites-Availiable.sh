@@ -12,7 +12,11 @@ do
  echo $FILENAME
  echo "creating ln for $FILENAME"
  ln -s "/etc/nginx/sites-available/$FILENAME" /etc/nginx/sites-enabled
+ sudo certbot --nginx -d $FILENAME
 done
+
+sudo nginx -t
+sudo nginx -s reload
 
 
 
