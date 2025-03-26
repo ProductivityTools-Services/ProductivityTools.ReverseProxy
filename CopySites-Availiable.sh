@@ -22,8 +22,8 @@ do
  if [[ -e $SIMLINKPATH ]]; then
   echo "VERBOSE: simlink already  exists"
  else
-  echo "File does not exist"
-  ln -s "/etc/nginx/sites-available/$FILENAME" /etc/nginx/sites-enable
+  echo "VERBOSE: File does not exist, creating simlink"
+  ln -s "/etc/nginx/sites-available/$FILENAME" /etc/nginx/sites-enabled
 fi 
 
 done
@@ -32,8 +32,8 @@ done
 
 sudo nginx -t
 sudo nginx -s reload
-
-ls /etc/nginx/sites-enabled/
+echo "VERBOSE: /etc/nginx/sites-enabled/ content:"
+ls -al /etc/nginx/sites-enabled/
 
 #cp -R ./sites-available/.  /etc/nginx/sites-available/
 
