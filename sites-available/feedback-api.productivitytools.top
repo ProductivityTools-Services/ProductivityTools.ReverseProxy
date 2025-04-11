@@ -5,6 +5,6 @@
         server_name feedback-api.productivitytools.top;
 
         location / {
-                proxy_pass http://192.168.0.11:8001;
+                proxy_pass http://192.168.0.54:8001;
         }
 }
