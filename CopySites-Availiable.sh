@@ -24,8 +24,8 @@ do
  else
   echo "VERBOSE: File does not exist, creating simlink"
   ln -s "/etc/nginx/sites-available/$FILENAME" /etc/nginx/sites-enabled
-  sudo certbot --nginx -d $FILENAME
 fi 
+  sudo certbot --nginx -d $FILENAME --reinstall
 
 done
 
