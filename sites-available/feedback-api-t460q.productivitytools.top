@@ -2,7 +2,7 @@
         listen 80;
         listen [::]:80;
 
-        server_name feedback-api.productivitytools.top;
+        server_name feedback-api-t460q.productivitytools.top;
 
         location / {
                 proxy_pass http://192.168.0.52:8001;
