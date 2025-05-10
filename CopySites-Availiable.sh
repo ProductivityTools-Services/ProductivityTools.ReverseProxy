@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function bashWrite {
-  echo #1
+  echo $1
 }
 
 FILES="./sites-available/*"
