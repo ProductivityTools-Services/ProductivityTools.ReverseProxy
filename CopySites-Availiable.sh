@@ -12,7 +12,7 @@ function bashWrite {
   VERBOSE_LEVEL=$1
   LOCAL_VERBOSE=$2
   TEXT=$3
-  if [VERBOSE_LEVEL -eq LOCAL_VERBOSE]
+  if [[ $VERBOSE_LEVEL -eq $LOCAL_VERBOSE]]
   then
   echo $TEXT
   fi
