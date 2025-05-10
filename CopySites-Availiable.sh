@@ -9,10 +9,10 @@ fi
 
 
 function bashWrite {
-  VERBOSE_LEVEL=$1
+  GLOBAL_VERBOSE_LEVEL=$1
   LOCAL_VERBOSE=$2
   TEXT=$3
-  if [[ $VERBOSE_LEVEL -eq $LOCAL_VERBOSE]]
+  if [[ $GLOBAL_VERBOSE_LEVEL -eq $LOCAL_VERBOSE ]]
   then
   echo $TEXT
   fi
@@ -28,7 +28,7 @@ do
  bashWrite VERBOSE_LEVEL 2 "VERBOSE: copy $fullpath to sites-available"
  cp $fullpath /etc/nginx/sites-available/
  FILENAME=$(basename $fullpath)
- bashWrite  "VERBOSE: only filename: $FILENAME"
+ bashWrite VERBOSE_LEVEL 2 "VERBOSE: only filename: $FILENAME"
  bashWrite VERBOSE_LEVEL 2 "VERBOSE: creating ln for $FILENAME"
 
  SITEENABLEDPATH="/etc/nginx/sites-availiable/$FILENAME"
@@ -43,16 +43,21 @@ do
   bashWrite VERBOSE_LEVEL 2 "VERBOSE: File does not exist, creating simlink"
   ln -s "/etc/nginx/sites-available/$FILENAME" /etc/nginx/sites-enabled
 fi 
-  sudo certbot --nginx -d $FILENAME --reinstall
+  a=$(sudo certbot --nginx -d $FILENAME --reinstall 2>&1)
+  echo $a
+  bashWrite VERBOSE_LEVEL 1 $a
 
 done
 
 
 
-sudo nginx -t
-sudo nginx -s reload
+a=$(sudo nginx -t 2>&1)
+bashWrite VERVBOSE_LEVEL 2 $a
+
+a=$(sudo nginx -s reload 2>&1)
+bashWrite VERBSOE_LEVEL 2 $a
 bashWrite VERBOSE_LEVEL 2 "VERBOSE: /etc/nginx/sites-enabled/ content:"
-ls -al /etc/nginx/sites-enabled/
+
 
 #cp -R ./sites-available/.  /etc/nginx/sites-available/
 
