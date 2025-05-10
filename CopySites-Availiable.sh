@@ -1,11 +1,15 @@
 #!/bin/bash
 
+function bashWrite {
+  echo #1
+}
+
 FILES="./sites-available/*"
 echo "$FILES"
 
 for fullpath in $FILES;
 do
- echo "VERBOSE: --------------"
+ bashWrite "VERBOSE: --------------"
  echo "VERBOSE: processing file: $fullpath"
  echo "VERBOSE: copy $fullpath to sites-available"
  cp $fullpath /etc/nginx/sites-available/
