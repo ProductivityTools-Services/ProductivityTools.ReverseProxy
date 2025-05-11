@@ -2,9 +2,9 @@
         listen 80;
         listen [::]:80;
 
-        server_name trips-api-m710q.productivitytools.top;
+        server_name salaries-api-m710q.productivitytools.top;
 
         location / {
-                proxy_pass http://192.168.0.54:8002;
+                proxy_pass http://192.168.0.54:8005;
         }
 }
