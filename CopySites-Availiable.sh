@@ -18,6 +18,13 @@ function bashWrite {
   fi
 }
 
+function writeSuccess {
+ SUCCESSTEXT=$1
+ if [[ $SUCCESSTEXT == *"Congratulations! You have successfully enabled HTTPS on"* ]];then 
+  echo "Congratulations! You have successfully enabled HTTPS on file above"
+ fi
+}
+
 FILES="./sites-available/*"
 echo "$FILES"
 
@@ -33,10 +40,8 @@ do
 
  SITEENABLEDPATH="/etc/nginx/sites-availiable/$FILENAME"
  bashWrite VERBOSE_LEVEL 2 "VERBOSE: site enabled path:$SITEENABLEDPATH"
-
  SIMLINKPATH="/etc/nginx/sites-enabled/$FILENAME"
  bashWrite VERBOSE_LEVEL 2 "VERBOSE: simlink path: $SIMLINKPATH"
- 
  if [[ -e $SIMLINKPATH ]]; then
   bashWrite VERBOSE_LEVEL 2 "VERBOSE: simlink already  exists"
  else
@@ -44,9 +49,8 @@ do
   ln -s "/etc/nginx/sites-available/$FILENAME" /etc/nginx/sites-enabled
 fi 
   a=$(sudo certbot --nginx -d $FILENAME --reinstall 2>&1)
-  echo $a
-  bashWrite VERBOSE_LEVEL 1 $a
-
+ # echo $a
+  writeSuccess "$a"
 done
 
 
