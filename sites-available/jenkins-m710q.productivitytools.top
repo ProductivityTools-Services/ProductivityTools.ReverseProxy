@@ -2,7 +2,7 @@
         listen 80;
         listen [::]:80;
 
-        server_name jenkins-tiny-1.productivitytools.top;
+        server_name jenkins-m710q.productivitytools.top;
 
         location / {
                 proxy_pass http://192.168.0.54:8080;
