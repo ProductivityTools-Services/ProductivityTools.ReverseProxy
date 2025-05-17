@@ -12,7 +12,7 @@ function bashWrite {
   GLOBAL_VERBOSE_LEVEL=$1
   LOCAL_VERBOSE=$2
   TEXT=$3
-  if [[ $GLOBAL_VERBOSE_LEVEL -eq $LOCAL_VERBOSE ]]
+  if [[ $GLOBAL_VERBOSE_LEVEL -le $LOCAL_VERBOSE ]]
   then
   echo $TEXT
   fi
@@ -25,11 +25,7 @@ function writeSuccess {
  fi
 }
 
-FILES="./sites-available/*"
-echo "$FILES"
-
-for fullpath in $FILES;
-do
+function processFile{
  bashWrite VERBOSE_LEVEL 1 "VERBOSE: --------------"
  bashWrite VERBOSE_LEVEL 1 "VERBOSE: processing file: $fullpath"
  bashWrite VERBOSE_LEVEL 2 "VERBOSE: copy $fullpath to sites-available"
@@ -51,6 +47,15 @@ fi
   a=$(sudo certbot --nginx -d $FILENAME --reinstall 2>&1)
  # echo $a
   writeSuccess "$a"
+}
+
+FILES="./sites-available/*"
+echo "$FILES"
+
+for fullpath in $FILES;
+ processFile $fullpath
+do
+
 done
 
 

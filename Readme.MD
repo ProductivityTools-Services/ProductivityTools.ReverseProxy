@@ -22,3 +22,9 @@ Debug:
 ls /etc/nginx/sites-enabled/
 
 ```
+
+
+```
+./CopySites-Availiable.sh is equal to ./CopySites-Availiable.sh 1
+./CopySites-Availiable.sh 2 gives more details
+```
