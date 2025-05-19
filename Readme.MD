@@ -29,7 +29,7 @@ ls /etc/nginx/sites-enabled/
 ./CopySites-Availiable.sh 2 gives more details
 ```
 
-If you want to execute script only for one file then"
+If you want to execute script only for one file then:
 ```
 sudo ./CopySites-Availiable.sh 2 transfers-api-t460.productivitytools.top
 
