@@ -1,14 +1,5 @@
 #!/bin/bash
 
-if [ $# -eq 0 ]
-  then
-    VERBOSE_LEVEL=1
-    else
-    VERBOSE_LEVEL=$1
-fi
-echo $VERBOSE_LEVEL
-
-
 function bashWrite {
   GLOBAL_VERBOSE_LEVEL=$1
   LOCAL_VERBOSE=$2
@@ -21,9 +12,12 @@ function bashWrite {
 
 function writeSuccess {
  SUCCESSTEXT=$1
- if [[ $SUCCESSTEXT == *"Congratulations! You have successfully enabled HTTPS on"* ]];then 
+ if [[ $SUCCESSTEXT =~ "Congratulations! You have successfully enabled HTTPS on" ]];then 
   echo "Congratulations! You have successfully enabled HTTPS on file above"
+ else
+ echo "ERROR!!!!!"
  fi
+ 
  
 }
 
@@ -49,18 +43,40 @@ function processFile {
   bashWrite $VERBOSE_LEVEL 2 "VERBOSE: File does not exist, creating simlink"
   ln -s "/etc/nginx/sites-available/$FILENAME" /etc/nginx/sites-enabled
  fi 
+  echo "Last x"
   a=$(sudo certbot --nginx -d $FILENAME --reinstall 2>&1)
   echo $a
   writeSuccess "$a"
 }
 
-FILES="./sites-available/*"
-echo "$FILES"
+VERBOSE_LEVEL=1
+echo $#
+if [ $# -ge 1 ];
+  then
+    VERBOSE_LEVEL=$1
+fi
+echo "Verbose level: $VERBOSE_LEVEL"
 
-for fullpath in $FILES;
-do
- processFile $fullpath
-done
+FILE_TO_PROCESS=''
+if [ $# -eq 2 ]
+  then
+    FILE_TO_PROCESS=$2
+    echo "File to process $FILE_TO_PROCESS"
+    filePath="./sites-available/$FILE_TO_PROCESS"
+    echo "File Path: $filePath"
+    processFile $filePath
+  else
+  FILES="./sites-available/*"
+  echo "$FILES"
+
+  for fullpath in $FILES;
+  do
+   echo $fullpath
+    processFile $fullpath
+  done
+fi
+
+
 
 
 
