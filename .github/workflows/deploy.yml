@@ -1,0 +1,17 @@
+name: Deploy Proxy Sites
+
+on:
+  push:
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        
+      - name: Make script executable
+        run: chmod +x ./CopySites-Availiable.sh
+        
+      - name: Execute CopySites-Availiable.sh
+        run: sudo ./CopySites-Availiable.sh
