@@ -4,7 +4,24 @@ server {
 
         server_name guacamole.productivitytools.top;
 
+        # Zwiększamy limit przesyłanych plików (przydatne przy transferze plików przez Guacamole)
+        client_max_body_size 4096m;
+
         location / {
                 proxy_pass http://192.168.0.41:8090;
+
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection "upgrade";
+
+                # Przekazywanie nagłówków HTTP (kluczowe dla poprawnego działania aplikacji)
+                proxy_set_header Host $http_host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+
+                # Wyłączenie buforowania – ekstremalnie ważne przy RDP/VNC!
+                # Dzięki temu Nginx przesyła obraz natychmiast, zamiast czekać na zapełnienie bufora.
+                proxy_buffering off;
+                proxy_http_version 1.1;
         }
 }
