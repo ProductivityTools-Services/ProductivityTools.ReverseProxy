@@ -51,28 +51,26 @@ function processFile {
 }
 
 VERBOSE_LEVEL=1
-echo $#
 if [ $# -ge 1 ];
   then
     VERBOSE_LEVEL=$1
 fi
-echo "Verbose level: $VERBOSE_LEVEL"
+bashWrite $VERBOSE_LEVEL 2 "Verbose level: $VERBOSE_LEVEL"
 
 FILE_TO_PROCESS=''
 if [ $# -eq 2 ]
   then
     FILE_TO_PROCESS=$2
-    echo "File to process $FILE_TO_PROCESS"
+    bashWrite $VERBOSE_LEVEL 2 "File to process $FILE_TO_PROCESS"
     filePath="./sites-available/$FILE_TO_PROCESS"
-    echo "File Path: $filePath"
+    bashWrite $VERBOSE_LEVEL 2 "File Path: $filePath"
     processFile $filePath
   else
   FILES="./sites-available/*"
-  echo "$FILES"
+  bashWrite $VERBOSE_LEVEL 2 "$FILES"
 
   for fullpath in $FILES;
   do
-   echo $fullpath
     processFile $fullpath
   done
 fi
