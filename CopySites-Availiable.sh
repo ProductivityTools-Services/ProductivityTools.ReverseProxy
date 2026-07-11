@@ -11,25 +11,28 @@ function bashWrite {
 }
 
 function writeSuccess {
- SUCCESSTEXT=$1
- if [[ $SUCCESSTEXT =~ "Congratulations! You have successfully enabled HTTPS on" ]];then 
-  echo "Congratulations! You have successfully enabled HTTPS on file above"
- else
- echo "ERROR!!!!!"
- fi
- 
- 
+  FILENAME=$1
+  SUCCESSTEXT=$2
+  if [[ $SUCCESSTEXT =~ "Congratulations! You have successfully enabled HTTPS on" || $SUCCESSTEXT =~ "Certificate not yet due for renewal" ]]; then 
+    # Extract "Certificate not yet due for renewal" or simple status message
+    if [[ $SUCCESSTEXT =~ "Certificate not yet due for renewal" ]]; then
+      echo "$FILENAME - Certificate not yet due for renewal. Deploying certificate successfully deployed."
+    else
+      echo "$FILENAME - Successfully enabled HTTPS."
+    fi
+  else
+    echo "ERROR for $FILENAME!!!!!"
+    echo "$SUCCESSTEXT"
+  fi
 }
 
 function processFile {
  fullpath=$1
- echo "FullPath:"
- echo $fullpath
+ FILENAME=$(basename $fullpath)
  bashWrite $VERBOSE_LEVEL 1 "VERBOSE: --------------"
  bashWrite $VERBOSE_LEVEL 1 "VERBOSE: processing file: $fullpath"
  bashWrite $VERBOSE_LEVEL 2 "VERBOSE: copy $fullpath to sites-available"
  cp $fullpath /etc/nginx/sites-available/
- FILENAME=$(basename $fullpath)
  bashWrite $VERBOSE_LEVEL 2 "VERBOSE: only filename: $FILENAME"
  bashWrite $VERBOSE_LEVEL 2 "VERBOSE: creating ln for $FILENAME"
 
@@ -43,10 +46,8 @@ function processFile {
   bashWrite $VERBOSE_LEVEL 2 "VERBOSE: File does not exist, creating simlink"
   ln -s "/etc/nginx/sites-available/$FILENAME" /etc/nginx/sites-enabled
  fi 
-  echo "Last x"
-  a=$(sudo certbot --nginx -d $FILENAME --reinstall 2>&1)
-  echo $a
-  writeSuccess "$a"
+  cert_out=$(sudo certbot --nginx -d $FILENAME --reinstall 2>&1)
+  writeSuccess "$FILENAME" "$cert_out"
 }
 
 VERBOSE_LEVEL=1
