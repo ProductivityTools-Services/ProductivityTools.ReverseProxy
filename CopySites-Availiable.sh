@@ -29,8 +29,8 @@ function writeSuccess {
 function processFile {
  fullpath=$1
  FILENAME=$(basename $fullpath)
- bashWrite $VERBOSE_LEVEL 1 "VERBOSE: --------------"
- bashWrite $VERBOSE_LEVEL 1 "VERBOSE: processing file: $fullpath"
+ bashWrite $VERBOSE_LEVEL 2 "VERBOSE: --------------"
+ bashWrite $VERBOSE_LEVEL 2 "VERBOSE: processing file: $fullpath"
  bashWrite $VERBOSE_LEVEL 2 "VERBOSE: copy $fullpath to sites-available"
  cp $fullpath /etc/nginx/sites-available/
  bashWrite $VERBOSE_LEVEL 2 "VERBOSE: only filename: $FILENAME"
