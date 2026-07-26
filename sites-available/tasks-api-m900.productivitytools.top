@@ -2,7 +2,7 @@ server {
         listen 80;
         listen [::]:80;
 
-        server_name task-api-m900.productivitytools.top;
+        server_name tasks-api-m900.productivitytools.top;
 
         location / {
                 proxy_pass http://192.168.0.100:8009;
