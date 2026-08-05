@@ -2,13 +2,13 @@ server {
         listen 80;
         listen [::]:80;
 
-        server_name __ADDRESS__;
+        server_name guacamole.productivitytools.top;
 
         # Zwiększamy limit przesyłanych plików (przydatne przy transferze plików przez Guacamole)
         client_max_body_size 4096m;
 
         location / {
-                proxy_pass http://__IP__:__PORT__;
+                proxy_pass http://192.168.0.41:8090;
 
                 proxy_set_header Upgrade $http_upgrade;
                 proxy_set_header Connection "upgrade";

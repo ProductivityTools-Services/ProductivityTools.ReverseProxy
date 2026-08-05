@@ -2,6 +2,8 @@ $uri = "https://script.google.com/macros/s/AKfycbyMXkh3v12rqFIkeDG3dzK6WRta9TKil
 $targetDir = Join-Path $PSScriptRoot "sites-available"
 $customConfigDir = Join-Path $PSScriptRoot "custom-configs"
 
+$generatedFiles = @()
+
 # 1. Remove all files from the sites-available directory
 if (Test-Path $targetDir) {
     Write-Host "Clearing directory: $targetDir"
@@ -27,7 +29,7 @@ try {
     exit
 }
 
-# 3. Generate files
+# 3. Generate files from API data
 foreach ($item in $data) {
     if (-not $item.Address -or -not $item.Ip -or -not $item.Port -or $item.Address -eq "#REF!" -or $item.Address -eq ".productivitytools.top") {
         Write-Verbose "Skipping incomplete or invalid item: $($item | ConvertTo-Json -Compress)"
@@ -40,7 +42,7 @@ foreach ($item in $data) {
     $customFilePath = Join-Path $customConfigDir $fileName
 
     if (Test-Path $customFilePath) {
-        Write-Host "Using custom template for: $fileName"
+        Write-Host "Using custom template for API site: $fileName"
         $config = Get-Content -Path $customFilePath -Raw
         $config = $config -replace '__ADDRESS__', $item.Address `
                           -replace '__IP__', $item.Ip `
@@ -62,6 +64,23 @@ server {
 
     Write-Host "Generating file: $fileName"
     $config | Out-File -FilePath $filePath -Encoding utf8 -NoNewline
+    $generatedFiles += $fileName
 }
 
-Write-Host "Generation complete."
+# 4. Process any standalone custom configs in custom-configs directory that were not generated from API data
+if (Test-Path $customConfigDir) {
+    $customFiles = Get-ChildItem -Path $customConfigDir -File
+    foreach ($customFile in $customFiles) {
+        $fileName = $customFile.Name
+        if ($generatedFiles -notcontains $fileName) {
+            Write-Host "Processing standalone custom config: $fileName"
+            $filePath = Join-Path $targetDir $fileName
+            $config = Get-Content -Path $customFile.FullName -Raw
+            $config = $config -replace '__ADDRESS__', $fileName
+            $config | Out-File -FilePath $filePath -Encoding utf8 -NoNewline
+            $generatedFiles += $fileName
+        }
+    }
+}
+
+Write-Host "Generation complete. Generated $($generatedFiles.Count) sites."
