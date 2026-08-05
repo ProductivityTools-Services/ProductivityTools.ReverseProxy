@@ -1,5 +1,7 @@
 $uri = "https://script.google.com/macros/s/AKfycbyMXkh3v12rqFIkeDG3dzK6WRta9TKilVJ3IOUqt-1599PnwrP5KP_-wPUyOXDbW44Z/exec"
 $targetDir = Join-Path $PSScriptRoot "sites-available"
+$customConfigDir = Join-Path $PSScriptRoot "custom-configs"
+
 # 1. Remove all files from the sites-available directory
 if (Test-Path $targetDir) {
     Write-Host "Clearing directory: $targetDir"
@@ -35,8 +37,16 @@ foreach ($item in $data) {
     $port = $item.Port
     $fileName = $item.Address
     $filePath = Join-Path $targetDir $fileName
+    $customFilePath = Join-Path $customConfigDir $fileName
 
-    $config = @"
+    if (Test-Path $customFilePath) {
+        Write-Host "Using custom template for: $fileName"
+        $config = Get-Content -Path $customFilePath -Raw
+        $config = $config -replace '__ADDRESS__', $item.Address `
+                          -replace '__IP__', $item.Ip `
+                          -replace '__PORT__', $port
+    } else {
+        $config = @"
 server {
         listen 80;
         listen [::]:80;
@@ -48,6 +58,7 @@ server {
         }
 }
 "@
+    }
 
     Write-Host "Generating file: $fileName"
     $config | Out-File -FilePath $filePath -Encoding utf8 -NoNewline
