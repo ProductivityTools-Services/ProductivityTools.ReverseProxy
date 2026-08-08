@@ -5,6 +5,6 @@ server {
         server_name tasks-api.productivitytools.top;
 
         location / {
-                proxy_pass http://192.168.0.100:8002;
+                proxy_pass http://192.168.0.100:8009;
         }
 }
