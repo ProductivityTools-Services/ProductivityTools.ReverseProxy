@@ -5,6 +5,6 @@ server {
         server_name salaries-api.productivitytools.top;
 
         location / {
-                proxy_pass http://192.168.0.54:8006;
+                proxy_pass http://192.168.0.100:8002;
         }
 }
