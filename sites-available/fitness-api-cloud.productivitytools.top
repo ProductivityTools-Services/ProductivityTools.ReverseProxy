@@ -1,0 +1,10 @@
+server {
+        listen 80;
+        listen [::]:80;
+
+        server_name fitness-api-cloud.productivitytools.top;
+
+        location / {
+                proxy_pass http://34.118.94.48:8084;
+        }
+}
