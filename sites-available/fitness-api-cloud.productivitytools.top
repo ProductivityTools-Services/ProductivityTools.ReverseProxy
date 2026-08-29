@@ -5,6 +5,6 @@ server {
         server_name fitness-api-cloud.productivitytools.top;
 
         location / {
-                proxy_pass http://34.118.94.48:8084;
+                proxy_pass http://34.118.29.53:8084;
         }
 }
