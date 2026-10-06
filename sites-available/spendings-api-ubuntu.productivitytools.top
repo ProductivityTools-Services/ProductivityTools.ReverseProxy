@@ -2,7 +2,7 @@ server {
         listen 80;
         listen [::]:80;
 
-        server_name familyexpenses-api-ubuntu.productivitytools.top;
+        server_name spendings-api-ubuntu.productivitytools.top;
 
         location / {
                 proxy_pass http://192.168.0.41:8086;
