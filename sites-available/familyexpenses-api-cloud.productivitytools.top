@@ -1,0 +1,10 @@
+server {
+        listen 80;
+        listen [::]:80;
+
+        server_name familyexpenses-api-cloud.productivitytools.top;
+
+        location / {
+                proxy_pass http://34.116.182.71:8086;
+        }
+}
