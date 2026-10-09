@@ -1,0 +1,10 @@
+server {
+        listen 80;
+        listen [::]:80;
+
+        server_name notecast-api.productivitytools.top;
+
+        location / {
+                proxy_pass http://34.45.201.70:80;
+        }
+}
